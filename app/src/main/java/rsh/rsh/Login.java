@@ -11,6 +11,7 @@ public class Login extends AppCompatActivity {
     TextInputLayout txtinputusuario;
     TextInputLayout txtinputcontra;
     Button btniniciar;
+   
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
