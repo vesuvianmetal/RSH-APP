@@ -1,16 +1,16 @@
 package rsh.rsh;
-
 import android.content.Intent;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-
+import android.widget.TextView;
+import android.widget.Toast;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-
+import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,6 +19,7 @@ public class Login extends AppCompatActivity {
     TextInputLayout txtinputusuario;
     TextInputLayout txtinputcontra;
     Button btniniciar;
+    TextView txtpueba;
 
 
     @Override
@@ -26,8 +27,7 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        txtinputusuario = findViewById(R.id.log_edit_usuario);
-        txtinputcontra = findViewById(R.id.log_edit_contra);
+
         btniniciar = findViewById(R.id.btn_log_iniciar);
 
         btniniciar.setOnClickListener(new View.OnClickListener() {
@@ -35,12 +35,16 @@ public class Login extends AppCompatActivity {
             public void onClick(View view) {
 
 
-                validarusuario();
-                validarcontraseña();
 
+                txtinputusuario = findViewById(R.id.log_edit_usuario);
+                txtinputcontra = findViewById(R.id.log_edit_contra);
+
+                txtpueba = findViewById(R.id.tvprueba);
 
                 final String usuario = txtinputusuario.getEditText().getText().toString();
                 final String contra = txtinputcontra.getEditText().getText().toString();
+
+                txtpueba.setText(usuario + contra);
 
                 Response.Listener<String> respondeListener = new Response.Listener<String>() {
                     @Override
@@ -51,19 +55,17 @@ public class Login extends AppCompatActivity {
                             boolean success = jsonresponse.getBoolean("success");
                             if (success) {
 
-                                String name = jsonresponse.getString("usuario");
+                             //   String name = jsonresponse.getString("username");
 
 
 
-                                Intent intent = new Intent(Login.this, Traslados.class);
-                                intent.putExtra("nombre", name);
-                                ;
+
+                                    Intent intent = new Intent(Login.this, Traslados.class);
+
+                                    Login.this.startActivity(intent);
 
 
-                                Login.this.startActivity(intent);
-                            } else {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
-                                builder.setMessage("Error Al Iniciar Session PRRO").setNegativeButton("Retry", null).create().show();
+
                             }
 
                         } catch (JSONException e) {
@@ -71,6 +73,11 @@ public class Login extends AppCompatActivity {
                         }
                     }
                 };
+
+
+                LoginRequest loginRequest = new LoginRequest(usuario , contra, respondeListener );
+                RequestQueue queue = Volley.newRequestQueue(Login.this);
+                queue.add(loginRequest);
 
 
             }
