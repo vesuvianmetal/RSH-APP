@@ -41,10 +41,11 @@ public class Login extends AppCompatActivity {
 
                 txtpueba = findViewById(R.id.tvprueba);
 
-                final String usuario = txtinputusuario.getEditText().getText().toString();
-                final String contra = txtinputcontra.getEditText().getText().toString();
+                final String username = txtinputusuario.getEditText().getText().toString();
+                final String passs = txtinputcontra.getEditText().getText().toString();
 
-                txtpueba.setText(usuario + contra);
+                txtpueba.setText(username + passs);
+
 
                 Response.Listener<String> respondeListener = new Response.Listener<String>() {
                     @Override
@@ -55,18 +56,26 @@ public class Login extends AppCompatActivity {
                             boolean success = jsonresponse.getBoolean("success");
                             if (success) {
 
-                             //   String name = jsonresponse.getString("username");
+                                String nombre = jsonresponse.getString("nombre");
+                                String tipo = jsonresponse.getString("tipo");
 
-
-
-
+                                if (tipo.equals("Traslado")){
                                     Intent intent = new Intent(Login.this, Traslados.class);
-
+                                    intent.putExtra("nombre", nombre);
                                     Login.this.startActivity(intent);
+                                }
+                                else {
+                                    Toast.makeText(Login.this, "El usuario ingresado nos es del tipo Traslado", Toast.LENGTH_SHORT).show();
+                                }
 
 
 
-                            }
+                            } else{
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+                                    builder.setMessage("Error Al Iniciar Session PRRO").setNegativeButton("Retry", null).create().show();
+                                }
+
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -75,7 +84,7 @@ public class Login extends AppCompatActivity {
                 };
 
 
-                LoginRequest loginRequest = new LoginRequest(usuario , contra, respondeListener );
+                LoginRequest loginRequest = new LoginRequest(username , passs, respondeListener );
                 RequestQueue queue = Volley.newRequestQueue(Login.this);
                 queue.add(loginRequest);
 
