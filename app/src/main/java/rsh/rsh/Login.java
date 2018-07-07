@@ -39,12 +39,12 @@ public class Login extends AppCompatActivity {
                 txtinputusuario = findViewById(R.id.log_edit_usuario);
                 txtinputcontra = findViewById(R.id.log_edit_contra);
 
-                txtpueba = findViewById(R.id.tvprueba);
+
 
                 final String username = txtinputusuario.getEditText().getText().toString();
                 final String passs = txtinputcontra.getEditText().getText().toString();
 
-                txtpueba.setText(username + passs);
+
 
 
                 Response.Listener<String> respondeListener = new Response.Listener<String>() {
